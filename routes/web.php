@@ -19,10 +19,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/threads', [ThreadsController::class, 'index']);
-Route::post('/threads', [ThreadsController::class, 'store']);
+Route::middleware(['auth'])->group(function () {
+    Route::post('/threads', [ThreadsController::class, 'store']);
+    Route::post('/threads/{thread}/replies', [ThreadRepliesController::class, 'store']);
+});
+
 Route::get('/threads/{thread}', [ThreadsController::class, 'show']);
-Route::post('/threads/{thread}/replies', [ThreadRepliesController::class, 'store']);
+Route::get('/threads', [ThreadsController::class, 'index']);
 
 Auth::routes();
 

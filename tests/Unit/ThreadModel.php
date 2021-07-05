@@ -14,16 +14,16 @@ class ThreadModel extends TestCase
 
     public function test_it_belongs_to_an_user()
     {
-        $thread = Thread::factory()->create();
+        $thread = create(Thread::class);
 
         $this->assertInstanceOf(User::class, $thread->owner);
     }
 
     public function test_it_has_many_replies()
     {
-        $thread = Thread::factory()->create();
+        $thread = create(Thread::class);
 
-        Reply::factory(2)->create(['thread_id' => $thread->id]);
+        create(Reply::class, 2, ['thread_id' => $thread->id]);
 
         $this->assertContainsOnlyInstancesOf(Reply::class, $thread->replies);
         $this->assertCount(2, $thread->replies);
@@ -31,10 +31,10 @@ class ThreadModel extends TestCase
 
     public function test_it_can_add_a_reply()
     {
-        $thread = Thread::factory()->create();
+        $thread = create(Thread::class);
 
         $thread->addReply([
-            'user_id' => User::factory()->create()->id,
+            'user_id' => create(User::class)->id,
             'body' => 'A sample body'
         ]);
 

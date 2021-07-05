@@ -14,11 +14,10 @@ class CreateThreadsTest extends TestCase
     public function test_authenticated_users_can_create_thread()
     {
         // Given i am a authenticated user
-        $user = User::factory()->create();
-
         // When i submit a new thread
-        $thread = Thread::factory()->make();
-        $response = $this->actingAs($user)
+        $thread = make(Thread::class);
+
+        $response = $this->signIn()
             ->followingRedirects()
             ->post('/threads', $thread->toArray());
 
@@ -30,7 +29,7 @@ class CreateThreadsTest extends TestCase
     {
         // Given i am a guest
         // When i submit a new thread
-        $thread = Thread::factory()->make();
+        $thread = make(Thread::class);
         $response = $this->post('/threads', $thread->toArray());
 
         // Then i should be redirected to login page and no thread has been created

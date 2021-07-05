@@ -16,14 +16,14 @@ class ParticipateInForum extends TestCase
     public function test_authenticated_user_can_post_a_reply_on_a_thread()
     {
         // Given there's a thread
-        $thread = Thread::factory()->create();
+        $thread = create(Thread::class);
         // And I am an authenticated user
-        $this->be(User::factory()->create());
 
         // When i post my reply on thread
-        $reply = Reply::factory()->make();
+        $reply = make(Reply::class);
 
         $response = $this
+            ->signIn()
             ->followingRedirects()
             ->post($thread->link() . '/replies', $reply->toArray());
 
@@ -34,11 +34,11 @@ class ParticipateInForum extends TestCase
     public function test_unauthenticated_user_can_not_post_reply_on_thread()
     {
         // Given there's a thread
-        $thread = Thread::factory()->create();
+        $thread = create(Thread::class);
 
         // And I am an unauthenticated user
         // When i post my reply on thread
-        $reply = Reply::factory()->make();
+        $reply = make(Reply::class);
 
         $response = $this->post($thread->link() . '/replies', $reply->toArray());
 

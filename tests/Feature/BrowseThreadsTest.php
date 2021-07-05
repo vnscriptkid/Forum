@@ -13,7 +13,7 @@ class BrowseThreadsTest extends TestCase
 
     public function test_can_browse_all_threads()
     {
-        $threads = Thread::factory(2)->create();
+        $threads = create(Thread::class, 2);
 
         $response = $this->get('/threads');
 
@@ -26,7 +26,7 @@ class BrowseThreadsTest extends TestCase
 
     public function test_can_browse_a_single_thread_and_who_created_it()
     {
-        $thread = Thread::factory()->create();
+        $thread = create(Thread::class);
 
         $response = $this->get('/threads/' . $thread->id);
 
@@ -37,9 +37,8 @@ class BrowseThreadsTest extends TestCase
 
     public function test_can_see_replies_belongs_to_one_thread()
     {
-        $this->withoutExceptionHandling();
         // Given a thread
-        $thread = Thread::factory()->create();
+        $thread = create(Thread::class);
         // And that thread has some replies
         $replies = Reply::factory(2)->create(['thread_id' => $thread->id]);
 

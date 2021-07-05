@@ -13,7 +13,7 @@ class ReplyModel extends TestCase
 
     public function test_it_has_an_owner()
     {
-        $reply = Reply::factory()->create();
+        $reply = create(Reply::class);
 
         $this->assertInstanceOf(User::class, $reply->owner);
     }
