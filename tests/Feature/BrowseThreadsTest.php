@@ -2,11 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Models\Reply;
 use App\Models\Thread;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ThreadsTest extends TestCase
+class BrowseThreadsTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -25,12 +26,32 @@ class ThreadsTest extends TestCase
 
     public function test_can_browse_a_single_thread()
     {
-        $this->withoutExceptionHandling();
         $thread = Thread::factory()->create();
 
         $response = $this->get('/threads/' . $thread->id);
 
         $response->assertStatus(200);
         $response->assertSeeText($thread->title);
+    }
+
+    public function test_can_see_replies_belongs_to_one_thread()
+    {
+        $this->withoutExceptionHandling();
+        // Given a thread
+        $thread = Thread::factory()->create();
+        // And that thread has some replies
+        $replies = Reply::factory(2)->create(['thread_id' => $thread->id]);
+
+        // When I browse that thread
+        $response = $this->get('/threads/' . $thread->id);
+
+        // Then I can see replies of that thread
+        $response->assertStatus(200);
+        $response->assertSeeText($replies[0]->body);
+        $response->assertSeeText($replies[1]->body);
+
+        // And I can see owners for each thread
+        $response->assertSeeText($replies[0]->owner->name);
+        $response->assertSeeText($replies[1]->owner->name);
     }
 }
