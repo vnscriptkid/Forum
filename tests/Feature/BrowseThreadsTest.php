@@ -24,7 +24,7 @@ class BrowseThreadsTest extends TestCase
         $response->assertSee('/threads/' . $threads[1]->id);
     }
 
-    public function test_can_browse_a_single_thread()
+    public function test_can_browse_a_single_thread_and_who_created_it()
     {
         $thread = Thread::factory()->create();
 
@@ -32,6 +32,7 @@ class BrowseThreadsTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSeeText($thread->title);
+        $response->assertSeeText($thread->owner->name);
     }
 
     public function test_can_see_replies_belongs_to_one_thread()

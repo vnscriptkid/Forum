@@ -9,6 +9,11 @@ class Thread extends Model
 {
     use HasFactory;
 
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function link()
     {
         return '/threads/' . $this->id;
