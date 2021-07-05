@@ -23,4 +23,9 @@ class Thread extends Model
     {
         return $this->hasMany(Reply::class);
     }
+
+    public function addReply($reply)
+    {
+        $this->replies()->create($reply);
+    }
 }

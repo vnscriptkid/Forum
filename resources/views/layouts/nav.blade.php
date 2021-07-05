@@ -68,7 +68,7 @@
                         </a>
 
                         <ul class="dropdown-menu" role="menu">
-                            <li>
+                            {{-- <li>
                                 <a href="{{ route('profile', Auth::user()) }}">My Profile</a>
                             </li>
 
@@ -83,7 +83,7 @@
                                       style="display: none;">
                                     {{ csrf_field() }}
                                 </form>
-                            </li>
+                            </li> --}}
                         </ul>
                     </li>
                 @endif

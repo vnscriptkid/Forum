@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ThreadRepliesController;
 use App\Http\Controllers\ThreadsController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,5 +19,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+
 Route::get('/threads', [ThreadsController::class, 'index']);
 Route::get('/threads/{thread}', [ThreadsController::class, 'show']);
+Route::post('/threads/{thread}/replies', [ThreadRepliesController::class, 'store']);
