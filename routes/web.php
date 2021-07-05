@@ -19,10 +19,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
-
 Route::get('/threads', [ThreadsController::class, 'index']);
 Route::get('/threads/{thread}', [ThreadsController::class, 'show']);
 Route::post('/threads/{thread}/replies', [ThreadRepliesController::class, 'store']);
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
