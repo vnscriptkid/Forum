@@ -25,11 +25,9 @@ class ThreadsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($channelSlug)
+    public function create()
     {
-        $channel = Channel::where('slug', $channelSlug)->firstOrFail();
-
-        return view('threads.create', compact('channel'));
+        return view('threads.create');
     }
 
     /**
@@ -38,15 +36,19 @@ class ThreadsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($channelSlug)
+    public function store()
     {
-        $channel = Channel::where('slug', $channelSlug)->firstOrFail();
+        $this->validate(request(), [
+            'title' => 'required',
+            'body' => 'required',
+            'channel_id' => 'required|exists:channels,id'
+        ]);
 
         $thread = Thread::create([
             'title' => request('title'),
             'body' => request('body'),
             'user_id' => auth()->id(),
-            'channel_id' => $channel->id
+            'channel_id' => request('channel_id')
         ]);
 
         return redirect($thread->link());

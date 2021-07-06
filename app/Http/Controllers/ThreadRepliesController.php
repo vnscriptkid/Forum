@@ -36,7 +36,9 @@ class ThreadRepliesController extends Controller
      */
     public function store($channelSlug, Thread $thread)
     {
-        Channel::where('slug', $channelSlug)->firstOrFail();
+        $this->validate(request(), [
+            'body' => 'required'
+        ]);
 
         $thread->addReply([
             'user_id' => auth()->id(),

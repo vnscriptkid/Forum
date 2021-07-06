@@ -17,7 +17,7 @@ class ParticipateInForum extends TestCase
     {
         parent::setUp();
         $this->thread = create(Thread::class);
-        $this->reply = make(Thread::class);
+        $this->reply = make(Reply::class);
     }
 
     public function test_authenticated_user_can_post_a_reply_on_a_thread()
@@ -46,5 +46,13 @@ class ParticipateInForum extends TestCase
         $response->assertRedirect('/login');
         // And no reply has been added
         $this->assertCount(0, $this->thread->replies);
+    }
+
+    public function test_reply_requires_a_body()
+    {
+        $reply = Reply::factory()->make(['body' => null]);
+
+        $this->signIn()->post($this->thread->link() . '/replies', $reply->toArray())
+            ->assertSessionHasErrors('body');
     }
 }

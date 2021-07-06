@@ -18,9 +18,11 @@ class CreateThreadsTest extends TestCase
         // When i submit a new thread
         $thread = make(Thread::class);
 
+        // dd($thread->link());
+
         $response = $this->signIn()
             ->followingRedirects()
-            ->post($thread->link(), $thread->toArray());
+            ->post('/threads', $thread->toArray());
 
         // Then i should be able to see it on threads page
         $response->assertSeeText($thread->title);
@@ -31,7 +33,7 @@ class CreateThreadsTest extends TestCase
         // Given i am a guest
         // When i submit a new thread
         $thread = make(Thread::class);
-        $response = $this->post($thread->link(), $thread->toArray());
+        $response = $this->post('/threads', $thread->toArray());
 
         // Then i should be redirected to login page and no thread has been created
         $response->assertRedirect('/login');
@@ -43,8 +45,7 @@ class CreateThreadsTest extends TestCase
         // Given i am an authenticated user and there's a channel
         // When i access GET /threads/create
         // Then I should be able to see the form
-        $channel = create(Channel::class);
-        $response = $this->signIn()->get("/threads/{$channel->slug}/create");
+        $response = $this->signIn()->get("/threads/create");
 
         $response->assertStatus(200);
         $response->assertSeeText('Create a new thread');
@@ -52,10 +53,40 @@ class CreateThreadsTest extends TestCase
 
     public function test_guest_can_not_see_create_thread_form()
     {
-        $channel = create(Channel::class);
-
-        $response = $this->get("/threads/{$channel->slug}/create");
+        $response = $this->get("/threads/create");
 
         $response->assertRedirect('/login');
+    }
+
+    public function test_thread_requires_a_title()
+    {
+        $this->publishThread(['title' => null])
+            ->assertSessionHasErrors('title');
+    }
+
+    public function test_thread_requires_a_body()
+    {
+        $this->publishThread(['body' => null])
+            ->assertSessionHasErrors('body');
+    }
+
+    public function test_thread_requires_a_channel_id()
+    {
+        $this->publishThread(['channel_id' => null])
+            ->assertSessionHasErrors('channel_id');
+    }
+
+    public function test_thread_requires_a_valid_channel_id()
+    {
+        $this->publishThread(['channel_id' => 999999])
+            ->assertSessionHasErrors('channel_id');
+    }
+
+    private function publishThread($overrides = [])
+    {
+        $thread = Thread::factory()->make($overrides);
+
+        return $this->signIn()
+            ->post('/threads', $thread->toArray());
     }
 }
