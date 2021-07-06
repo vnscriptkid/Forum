@@ -14,15 +14,18 @@
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Dropdown button
+                        Dropdown button
                     </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      @foreach (App\Models\Channel::all() as $channel)
+                        @foreach (App\Models\Channel::all() as $channel)
                         <a class="dropdown-item" href="{{ '/threads/'.$channel->slug }}">{{ $channel->name }}</a>
-                      @endforeach
+                        @endforeach
                     </div>
-                  </li>
+                </li>
 
+                <li class="nav-item">
+                    <a href="/threads/create" class="nav-link">New Thread</a>
+                </li>
             </ul>
 
             <!-- Right Side Of Navbar -->
