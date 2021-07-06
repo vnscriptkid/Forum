@@ -15,9 +15,8 @@ class BrowseThreadsTest extends TestCase
     public function test_can_browse_all_threads()
     {
         $threads = create(Thread::class, 2);
-        $channel = create(Channel::class);
 
-        $response = $this->get('/threads/' . $channel->slug);
+        $response = $this->get('/threads');
 
         $response->assertStatus(200);
         $response->assertSeeText($threads[0]->title);
@@ -26,9 +25,23 @@ class BrowseThreadsTest extends TestCase
         $response->assertSee($threads[1]->link());
     }
 
-    public function test_can_browse_a_single_thread_and_who_created_it()
+    public function test_can_filter_threads_belong_to_one_channel()
     {
         $this->withoutExceptionHandling();
+        $channel = create(Channel::class);
+
+        $threadOfChannel = create(Thread::class, 1, ['channel_id' => $channel->id]);
+        $threadOutsideChannel = create(Thread::class);
+
+        $response = $this->get("/threads/{$channel->slug}");
+
+        $response->assertStatus(200);
+        $response->assertSeeText($threadOfChannel->title);
+        $response->assertDontSeeText($threadOutsideChannel->title);
+    }
+
+    public function test_can_browse_a_single_thread_and_who_created_it()
+    {
         $thread = create(Thread::class);
 
         $response = $this->get($thread->link());
