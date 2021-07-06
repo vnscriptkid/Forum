@@ -36,4 +36,22 @@ class CreateThreadsTest extends TestCase
         $response->assertRedirect('/login');
         $this->assertCount(0, Thread::all());
     }
+
+    public function test_authenticated_user_can_view_create_thread_form()
+    {
+        // Given i am an authenticated user
+        // When i access GET /threads/create
+        // Then I should be able to see the form
+        $response = $this->signIn()->get('/threads/create');
+
+        $response->assertStatus(200);
+        $response->assertSeeText('Create a new thread');
+    }
+
+    public function test_guest_can_not_see_see_create_thread_form()
+    {
+        $response = $this->get('/threads/create');
+
+        $response->assertRedirect('/login');
+    }
 }

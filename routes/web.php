@@ -22,6 +22,7 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::post('/threads', [ThreadsController::class, 'store']);
     Route::post('/threads/{thread}/replies', [ThreadRepliesController::class, 'store']);
+    Route::get('/threads/create', [ThreadsController::class, 'create']);
 });
 
 Route::get('/threads/{thread}', [ThreadsController::class, 'show']);
