@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Channel;
 use App\Models\Thread;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,7 +20,7 @@ class CreateThreadsTest extends TestCase
 
         $response = $this->signIn()
             ->followingRedirects()
-            ->post('/threads', $thread->toArray());
+            ->post($thread->link(), $thread->toArray());
 
         // Then i should be able to see it on threads page
         $response->assertSeeText($thread->title);
@@ -30,7 +31,7 @@ class CreateThreadsTest extends TestCase
         // Given i am a guest
         // When i submit a new thread
         $thread = make(Thread::class);
-        $response = $this->post('/threads', $thread->toArray());
+        $response = $this->post($thread->link(), $thread->toArray());
 
         // Then i should be redirected to login page and no thread has been created
         $response->assertRedirect('/login');
@@ -39,18 +40,21 @@ class CreateThreadsTest extends TestCase
 
     public function test_authenticated_user_can_view_create_thread_form()
     {
-        // Given i am an authenticated user
+        // Given i am an authenticated user and there's a channel
         // When i access GET /threads/create
         // Then I should be able to see the form
-        $response = $this->signIn()->get('/threads/create');
+        $channel = create(Channel::class);
+        $response = $this->signIn()->get("/threads/{$channel->slug}/create");
 
         $response->assertStatus(200);
         $response->assertSeeText('Create a new thread');
     }
 
-    public function test_guest_can_not_see_see_create_thread_form()
+    public function test_guest_can_not_see_create_thread_form()
     {
-        $response = $this->get('/threads/create');
+        $channel = create(Channel::class);
+
+        $response = $this->get("/threads/{$channel->slug}/create");
 
         $response->assertRedirect('/login');
     }

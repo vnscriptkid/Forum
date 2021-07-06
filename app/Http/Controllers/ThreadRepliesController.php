@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Channel;
 use App\Models\Thread;
 use Illuminate\Http\Request;
 
@@ -33,8 +34,10 @@ class ThreadRepliesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Thread $thread)
+    public function store($channelSlug, Thread $thread)
     {
+        Channel::where('slug', $channelSlug)->firstOrFail();
+
         $thread->addReply([
             'user_id' => auth()->id(),
             'body' => request('body')

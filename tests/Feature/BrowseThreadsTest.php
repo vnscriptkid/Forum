@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,21 +15,23 @@ class BrowseThreadsTest extends TestCase
     public function test_can_browse_all_threads()
     {
         $threads = create(Thread::class, 2);
+        $channel = create(Channel::class);
 
-        $response = $this->get('/threads');
+        $response = $this->get('/threads/' . $channel->slug);
 
         $response->assertStatus(200);
         $response->assertSeeText($threads[0]->title);
         $response->assertSeeText($threads[1]->title);
-        $response->assertSee('/threads/' . $threads[0]->id);
-        $response->assertSee('/threads/' . $threads[1]->id);
+        $response->assertSee($threads[0]->link());
+        $response->assertSee($threads[1]->link());
     }
 
     public function test_can_browse_a_single_thread_and_who_created_it()
     {
+        $this->withoutExceptionHandling();
         $thread = create(Thread::class);
 
-        $response = $this->get('/threads/' . $thread->id);
+        $response = $this->get($thread->link());
 
         $response->assertStatus(200);
         $response->assertSeeText($thread->title);
@@ -43,7 +46,7 @@ class BrowseThreadsTest extends TestCase
         $replies = Reply::factory(2)->create(['thread_id' => $thread->id]);
 
         // When I browse that thread
-        $response = $this->get('/threads/' . $thread->id);
+        $response = $this->get($thread->link());
 
         // Then I can see replies of that thread
         $response->assertStatus(200);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Channel;
 use App\Models\Thread;
 use Illuminate\Http\Request;
 
@@ -24,9 +25,11 @@ class ThreadsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($channelSlug)
     {
-        return view('threads.create');
+        $channel = Channel::where('slug', $channelSlug)->firstOrFail();
+
+        return view('threads.create', compact('channel'));
     }
 
     /**
@@ -35,12 +38,15 @@ class ThreadsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($channelSlug)
     {
+        $channel = Channel::where('slug', $channelSlug)->firstOrFail();
+
         $thread = Thread::create([
             'title' => request('title'),
             'body' => request('body'),
-            'user_id' => auth()->id()
+            'user_id' => auth()->id(),
+            'channel_id' => $channel->id
         ]);
 
         return redirect($thread->link());
@@ -52,9 +58,11 @@ class ThreadsController extends Controller
      * @param  \App\Models\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show(Thread $thread)
+    public function show($channelSlug, Thread $thread)
     {
-        return view('threads.show', compact('thread'));
+        $channel = Channel::where('slug', $channelSlug)->firstOrFail();
+
+        return view('threads.show', compact('channel', 'thread'));
     }
 
     /**

@@ -13,38 +13,38 @@ class ParticipateInForum extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->thread = create(Thread::class);
+        $this->reply = make(Thread::class);
+    }
+
     public function test_authenticated_user_can_post_a_reply_on_a_thread()
     {
         // Given there's a thread
-        $thread = create(Thread::class);
         // And I am an authenticated user
-
         // When i post my reply on thread
-        $reply = make(Reply::class);
-
         $response = $this
             ->signIn()
             ->followingRedirects()
-            ->post($thread->link() . '/replies', $reply->toArray());
+            ->post($this->thread->link() . '/replies', $this->reply->toArray());
 
         // Then it's visible on the thread
-        $response->assertSeeText($reply->body);
+        $response->assertSeeText($this->reply->body);
     }
 
     public function test_unauthenticated_user_can_not_post_reply_on_thread()
     {
         // Given there's a thread
-        $thread = create(Thread::class);
-
         // And I am an unauthenticated user
         // When i post my reply on thread
-        $reply = make(Reply::class);
 
-        $response = $this->post($thread->link() . '/replies', $reply->toArray());
+        $response = $this->post($this->thread->link() . '/replies', $this->reply->toArray());
 
         // Then i should be redirected to login page
         $response->assertRedirect('/login');
         // And no reply has been added
-        $this->assertCount(0, $thread->replies);
+        $this->assertCount(0, $this->thread->replies);
     }
 }
