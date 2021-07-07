@@ -27,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/threads/{channel:slug}', [ThreadsController::class, 'index']);
-Route::get('/threads/{channel}/{thread}', [ThreadsController::class, 'show']);
+Route::get('/threads/{channelId}/{thread}', [ThreadsController::class, 'show']);
 Route::get('/threads', [ThreadsController::class, 'index']);
 
 Auth::routes();

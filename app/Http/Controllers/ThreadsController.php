@@ -61,11 +61,11 @@ class ThreadsController extends Controller
      * @param  \App\Models\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function show($channelSlug, Thread $thread)
+    public function show($channelId, Thread $thread)
     {
-        $channel = Channel::where('slug', $channelSlug)->firstOrFail();
+        $replies = $thread->replies()->paginate(2);
 
-        return view('threads.show', compact('channel', 'thread'));
+        return view('threads.show', compact('thread', 'replies'));
     }
 
     /**

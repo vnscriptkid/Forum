@@ -4,39 +4,28 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div>
-                            <a href="#">{{ $thread->owner->name }}</a> posted: 
-                            {{ $thread->title }}
-                        </div>   
-                    </div>                 
-                    <div class="panel-body">
-                        <p>{{ $thread->body }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                @foreach ($thread->replies as $reply)
+                <div class="row">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <a href="#">{{ $reply->owner->name }} </a>
-                            said {{ $reply->created_at->diffForHumans() }}
-                        </div>
+                            <div>
+                                <a href="#">{{ $thread->owner->name }}</a> posted: 
+                                {{ $thread->title }}
+                            </div>   
+                        </div>                 
                         <div class="panel-body">
-                            <p>{{ $reply->body }}</p>
+                            <p>{{ $thread->body }}</p>
                         </div>
                     </div>
+                </div>
+    
+                @foreach ($replies as $reply)
+                    @include('threads.reply')
                 @endforeach
-            </div>
-        </div>
 
-        @auth
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
+                {{ $replies->links() }}
+    
+                @auth
+                <div class="row">
                     <form action="{{ $thread->link() . '/replies' }}" method="post">
                         @csrf
                         <div class="form-group">
@@ -45,12 +34,20 @@
                         <button type="submit" class="btn btn-default">Submit</button>
                     </form>
                 </div>
+                @endauth
+    
+                @guest
+                    <p class="text-center">Please <a href="/login">Sign in</a> to participate in the discussion!</p>
+                @endguest
             </div>
-        @endauth
-
-        @guest
-            <p class="text-center">Please <a href="/login">Sign in</a> to participate in the discussion!</p>
-        @endguest
+            <div class="col-md-4">
+                This thread was published {{ $thread->formattedDate }}
+                <br>
+                by <a href="#">{{ $thread->owner->name }}</a>. 
+                <br>
+                It currently has {{ $thread->replies_count }} {{ Str::plural('comment', $thread->replies_count) }}.
+            </div>
+        </div>
     </div>    
 @endsection
 
