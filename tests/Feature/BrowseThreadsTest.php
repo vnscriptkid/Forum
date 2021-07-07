@@ -54,7 +54,31 @@ class BrowseThreadsTest extends TestCase
         $response->assertDontSeeText($threadNotByJohn->title);
     }
 
-    public function test_can_browse_a_single_thread_and_who_created_it()
+    public function test_can_sort_threads_by_popularity_all_time()
+    {
+        // Given there's 3 threads
+        // And they have 2 replies, 0 replies, 3 replies accordingly
+        // When I sort them by popularity
+        // Threads are displayed in order from most replies to least
+        $threadWith2Replies = create(Thread::class);
+        create(Reply::class, 2, ['thread_id' => $threadWith2Replies]);
+
+        $threadWithNoReplies = create(Thread::class);
+
+        $threadWith3Replies = create(Thread::class);
+        create(Reply::class, 3, ['thread_id' => $threadWith3Replies]);
+
+        $response = $this->get('/threads?popular=1');
+
+        $response->assertStatus(200);
+        $response->assertSeeTextInOrder([
+            $threadWith3Replies->title,
+            $threadWith2Replies->title,
+            $threadWithNoReplies->title,
+        ]);
+    }
+
+    public function test_can_browse_a_single_thread()
     {
         $thread = create(Thread::class);
 
