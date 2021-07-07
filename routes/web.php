@@ -16,11 +16,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-
 Route::middleware(['auth'])->group(function () {
     Route::post('/threads', [ThreadsController::class, 'store']);
     Route::post('/threads/{channel}/{thread}/replies', [ThreadRepliesController::class, 'store']);
@@ -34,4 +29,4 @@ Route::get('/threads', [ThreadsController::class, 'index']);
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

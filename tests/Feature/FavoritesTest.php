@@ -21,7 +21,7 @@ class FavoritesTest extends TestCase
 
         $response = $this->signIn()->post("/replies/{$reply->id}/favorites");
 
-        $response->assertStatus(200);
+        $response->assertStatus(302);
         $this->assertCount(1, $reply->favorites);
         $this->assertEquals($this->getSignedInUser()->id, $reply->favorites->first()->user_id);
     }
