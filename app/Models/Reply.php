@@ -28,8 +28,10 @@ class Reply extends Model
 
     public function favorite()
     {
-        $this->favorites()->create([
-            'user_id' => auth()->id()
-        ]);
+        $withUser = ['user_id' => auth()->id()];
+
+        if ($this->favorites()->where($withUser)->count() === 0) {
+            $this->favorites()->create($withUser);
+        }
     }
 }

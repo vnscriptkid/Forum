@@ -26,6 +26,17 @@ class FavoritesTest extends TestCase
         $this->assertEquals($this->getSignedInUser()->id, $reply->favorites->first()->user_id);
     }
 
+    public function test_authenticated_user_can_like_a_reply_only_once()
+    {
+        $this->withoutExceptionHandling();
+        $reply = create(Reply::class);
+
+        $this->signIn()->post("/replies/{$reply->id}/favorites");
+        $this->post("/replies/{$reply->id}/favorites");
+
+        $this->assertCount(1, $reply->favorites);
+    }
+
     public function test_guests_can_not_like_a_reply()
     {
         $reply = create(Reply::class);
