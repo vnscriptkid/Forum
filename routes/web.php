@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\ThreadRepliesController;
 use App\Http\Controllers\ThreadsController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/threads', [ThreadsController::class, 'store']);
     Route::post('/threads/{channel}/{thread}/replies', [ThreadRepliesController::class, 'store']);
     Route::get('/threads/create', [ThreadsController::class, 'create']);
+    Route::post('/replies/{reply}/favorites', [FavoritesController::class, 'store']);
 });
 
 Route::get('/threads/{channel:slug}', [ThreadsController::class, 'index']);

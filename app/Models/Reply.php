@@ -11,6 +11,11 @@ class Reply extends Model
 
     use HasFactory;
 
+    public function favorites()
+    {
+        return $this->morphMany(Favorite::class, 'favorited');
+    }
+
     public function owner()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -19,5 +24,12 @@ class Reply extends Model
     public function getFormattedDateAttribute()
     {
         return $this->created_at->diffForHumans();
+    }
+
+    public function favorite()
+    {
+        $this->favorites()->create([
+            'user_id' => auth()->id()
+        ]);
     }
 }
