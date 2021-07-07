@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -27,7 +28,6 @@ class BrowseThreadsTest extends TestCase
 
     public function test_can_filter_threads_belong_to_one_channel()
     {
-        $this->withoutExceptionHandling();
         $channel = create(Channel::class);
 
         $threadOfChannel = create(Thread::class, 1, ['channel_id' => $channel->id]);
@@ -38,6 +38,20 @@ class BrowseThreadsTest extends TestCase
         $response->assertStatus(200);
         $response->assertSeeText($threadOfChannel->title);
         $response->assertDontSeeText($threadOutsideChannel->title);
+    }
+
+    public function test_can_filter_threads_belong_to_one_username()
+    {
+        $john = create(User::class, 1, ['name' => 'john']);
+
+        $threadByJohn = create(Thread::class, 1, ['user_id' => $john->id]);
+        $threadNotByJohn = create(Thread::class);
+
+        $response = $this->get("/threads?by=john");
+
+        $response->assertStatus(200);
+        $response->assertSeeText($threadByJohn->title);
+        $response->assertDontSeeText($threadNotByJohn->title);
     }
 
     public function test_can_browse_a_single_thread_and_who_created_it()
