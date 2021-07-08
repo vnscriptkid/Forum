@@ -11,6 +11,8 @@ class Thread extends Model
 {
     protected $guarded = [];
 
+    protected $with = ['owner', 'channel'];
+
     use HasFactory;
 
     protected static function boot()
@@ -39,7 +41,7 @@ class Thread extends Model
 
     public function replies()
     {
-        return $this->hasMany(Reply::class)->with('owner')->withCount('favorites');
+        return $this->hasMany(Reply::class)->with('owner');
     }
 
     public function addReply($reply)

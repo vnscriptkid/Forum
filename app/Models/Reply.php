@@ -8,13 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Reply extends Model
 {
     protected $guarded = [];
+    protected $with = ['favorites', 'owner'];
 
     use HasFactory;
-
-    public function favorites()
-    {
-        return $this->morphMany(Favorite::class, 'favorited');
-    }
+    use Favoritable;
 
     public function owner()
     {
@@ -24,19 +21,5 @@ class Reply extends Model
     public function getFormattedDateAttribute()
     {
         return $this->created_at->diffForHumans();
-    }
-
-    public function favorite()
-    {
-        $withUser = ['user_id' => auth()->id()];
-
-        if (!$this->favorites()->where($withUser)->exists()) {
-            $this->favorites()->create($withUser);
-        }
-    }
-
-    public function isFavoritedByMe()
-    {
-        return $this->favorites()->where(['user_id' => auth()->id()])->exists();
     }
 }

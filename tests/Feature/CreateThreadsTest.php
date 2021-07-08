@@ -18,8 +18,6 @@ class CreateThreadsTest extends TestCase
         // When i submit a new thread
         $thread = make(Thread::class);
 
-        // dd($thread->link());
-
         $response = $this->signIn()
             ->followingRedirects()
             ->post('/threads', $thread->toArray());
