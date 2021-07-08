@@ -4,17 +4,20 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
-                <div class="row">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <div>
-                                <a href="#">{{ $thread->owner->name }}</a> posted: 
-                                {{ $thread->title }}
-                            </div>   
-                        </div>                 
-                        <div class="panel-body">
-                            <p>{{ $thread->body }}</p>
-                        </div>
+                <div class="card mb-3">
+                    <div class="card-header d-flex align-items-center">
+                        <div class="flex-fill">
+                            <a href="{{ $thread->owner->link() }}">{{ $thread->owner->name }}</a> posted: 
+                            {{ $thread->title }}
+                        </div>   
+                        <form action="{{ $thread->link() }}" method="post">
+                            @csrf
+                            @method('delete')
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>                 
+                    <div class="card-body">
+                        <p>{{ $thread->body }}</p>
                     </div>
                 </div>
     
@@ -25,15 +28,13 @@
                 {{ $replies->links() }}
     
                 @auth
-                <div class="row">
                     <form action="{{ $thread->link() . '/replies' }}" method="post">
                         @csrf
                         <div class="form-group">
                             <textarea class="form-control" name="body" rows="5" placeholder="Have something to say?"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-default">Submit</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
-                </div>
                 @endauth
     
                 @guest

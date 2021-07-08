@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Thread::class);
     }
+
+    public function link()
+    {
+        return route('profile', $this->name);
+    }
 }
