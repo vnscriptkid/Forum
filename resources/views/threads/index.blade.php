@@ -13,7 +13,7 @@
                                         {{ $thread->title }}
                                     </a>
                                 </h5>
-                                By <a href="#">{{ $thread->owner->name }}</a>
+                                By <a href="{{ route('profile', $thread->owner->name) }}">{{ $thread->owner->name }}</a>
                             </div>
                             <a href="{{ $thread->link() }}">{{ $thread->replies_count }} {{ Str::plural(' comment', $thread->replies_count ) }}</a>
                         </div>
