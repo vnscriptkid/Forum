@@ -9,12 +9,14 @@
                         <div class="flex-fill">
                             <a href="{{ $thread->owner->link() }}">{{ $thread->owner->name }}</a> posted: 
                             {{ $thread->title }}
-                        </div>   
-                        <form action="{{ $thread->link() }}" method="post">
-                            @csrf
-                            @method('delete')
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
+                        </div>
+                        @can('update', $thread)
+                            <form action="{{ $thread->link() }}" method="post">
+                                @csrf
+                                @method('delete')
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        @endcan
                     </div>                 
                     <div class="card-body">
                         <p>{{ $thread->body }}</p>
