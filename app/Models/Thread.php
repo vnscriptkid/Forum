@@ -6,6 +6,7 @@ use App\Filters\ThreadFilters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use ReflectionClass;
 
 class Thread extends Model
 {
@@ -14,6 +15,7 @@ class Thread extends Model
     protected $with = ['owner', 'channel'];
 
     use HasFactory;
+    use RecordsActivity;
 
     protected static function boot()
     {

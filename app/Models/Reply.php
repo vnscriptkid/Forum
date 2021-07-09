@@ -12,6 +12,12 @@ class Reply extends Model
 
     use HasFactory;
     use Favoritable;
+    use RecordsActivity;
+
+    protected static function boot()
+    {
+        parent::boot();
+    }
 
     public function owner()
     {
