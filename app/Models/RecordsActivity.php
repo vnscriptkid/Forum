@@ -26,9 +26,7 @@ trait RecordsActivity
     {
         $subject->activities()->create([
             'type' => static::getActivityType($subject, 'created'),
-            'user_id' => auth()->id(),
-            'created_at' => $subject->created_at,
-            'updated_at' => $subject->updated_at
+            'user_id' => auth()->id()
         ]);
     }
 
