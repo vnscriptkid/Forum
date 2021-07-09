@@ -10,4 +10,9 @@ class Activity extends Model
     protected $guarded = [];
 
     use HasFactory;
+
+    public function subject()
+    {
+        return $this->morphTo();
+    }
 }

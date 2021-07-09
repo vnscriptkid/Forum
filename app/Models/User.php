@@ -41,6 +41,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function activities()
+    {
+        return $this->hasMany(Activity::class);
+    }
+
     public function getRouteKeyName()
     {
         return 'name';

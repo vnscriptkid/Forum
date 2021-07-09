@@ -28,4 +28,9 @@ class Reply extends Model
     {
         return $this->created_at->diffForHumans();
     }
+
+    public function thread()
+    {
+        return $this->belongsTo(Thread::class);
+    }
 }

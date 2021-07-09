@@ -2,27 +2,16 @@
 
 @section('content')
     <div class="container">
-        <h1>{{ $profileUser->name }}
+        <h1 class="mb-3">{{ $profileUser->name }}
             <small class="text-muted">Since {{ $profileUser->created_at->diffForHumans() }}</small>
         </h1>   
         
-        @foreach ($threads as $thread)
-            <div class="card mb-3">
-                <div class="card-header d-flex align-items-center">
-                    <div class="flex-fill">
-                        <h5 class="card-title">
-                            <a href="{{ $thread->link() }}">
-                                {{ $thread->title }}
-                            </a>
-                        </h5>
-                        By <a href="{{ route('profile', $thread->owner->name) }}">{{ $thread->owner->name }}</a>
-                    </div>
-                    <a href="{{ $thread->link() }}">{{ $thread->replies_count }} {{ Str::plural(' comment', $thread->replies_count ) }}</a>
-                </div>
-                <p class="card-body">{{ $thread->body }}</p>
-            </div>
+        @foreach ($activitiesByDate as $date => $activities)
+            <h2 class="display-5 card-header">{{ $date }}</h2>
+            <br>    
+            @foreach ($activities as $activity)
+                @include("profiles.{$activity->type}")
+            @endforeach
         @endforeach
-
-        {{ $threads->links() }}
     </div>
 @endsection

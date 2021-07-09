@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Reply;
 use App\Models\Thread;
 use App\Models\User;
 use Carbon\Carbon;
@@ -25,7 +26,7 @@ class ProfilesTest extends TestCase
         $response->assertSeeText($user->name);
     }
 
-    public function test_can_see_posts_created_by_one_user_on_his_profile_with_latest_first()
+    public function test_can_see_threads_or_replies_created_by_one_user_on_his_profile_with_latest_first()
     {
         // Given there's an user
         // And there's 3 threads created by him
@@ -34,26 +35,29 @@ class ProfilesTest extends TestCase
         $this->withoutExceptionHandling();
 
         $user = create(User::class);
-        $threadA = create(Thread::class, 1, [
+        $this->signIn($user);
+
+        $order3Thread = create(Thread::class, 1, [
             'user_id' => $user->id,
             'created_at' => Carbon::parse('3 days ago')
         ]);
-        $threadB = create(Thread::class, 1, [
+        $order1Thread = create(Thread::class, 1, [
             'user_id' => $user->id,
             'created_at' => Carbon::parse('1 days ago')
         ]);
-        $threadC = create(Thread::class, 1, [
+        $order2Reply = create(Reply::class, 1, [
             'user_id' => $user->id,
-            'created_at' => Carbon::parse('2 days ago')
+            'created_at' => Carbon::parse('2 days ago'),
+            'thread_id' => $order1Thread->id
         ]);
 
         $response = $this->get("/profiles/{$user->name}");
 
         $response->assertStatus(200);
         $response->assertSeeTextInOrder([
-            $threadB->title,
-            $threadC->title,
-            $threadA->title,
+            $order1Thread->title,
+            $order2Reply->body,
+            $order3Thread->title,
         ]);
     }
 }
