@@ -7,6 +7,7 @@ use App\Models\Reply;
 use App\Models\Thread;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
@@ -19,6 +20,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         DB::transaction(function () {
+            Cache::clear();
+
             create(User::class, 1, [
                 'email' => 'thanh@gmail.com',
                 'password' => bcrypt('12345678')
