@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -48,7 +49,7 @@ class ProfilesController extends Controller
     {
         return view('profiles.show', [
             'profileUser' => $user,
-            'activitiesByDate' => $this->getActivities($user)
+            'activitiesByDate' => Activity::feed($user)
         ]);
     }
 
@@ -84,12 +85,5 @@ class ProfilesController extends Controller
     public function destroy(User $user)
     {
         //
-    }
-
-    public function getActivities($user)
-    {
-        return $user->activities()->with('subject')->latest()->take(50)->get()->groupBy(function ($activity) {
-            return $activity->created_at->format('Y-m-d');
-        });
     }
 }
