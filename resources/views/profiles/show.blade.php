@@ -10,7 +10,9 @@
             <h2 class="display-5 card-header">{{ $date }}</h2>
             <br>    
             @foreach ($activities as $activity)
-                @include("profiles.{$activity->type}")
+                @if (view()->exists("profiles.{$activity->type}"))
+                    @include("profiles.{$activity->type}")
+                @endif
             @endforeach
         @endforeach
     </div>

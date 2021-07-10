@@ -1,4 +1,4 @@
-<div class="card flex-fill mb-3">
+<div id="reply-{{ $reply->id }}" class="card flex-fill mb-3">
     <div class="card-header d-flex align-items-center">
         <div class="flex-fill">
             <a href="#">{{ $reply->owner->name }} </a>

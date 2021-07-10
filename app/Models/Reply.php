@@ -33,4 +33,9 @@ class Reply extends Model
     {
         return $this->belongsTo(Thread::class);
     }
+
+    public function link()
+    {
+        return $this->thread->link() . "#reply-{$this->id}";
+    }
 }
