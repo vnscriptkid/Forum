@@ -17,4 +17,13 @@
     <div class="card-body">
         <p>{{ $reply->body }}</p>
     </div>
+    @can('update', $reply)
+        <div class="card-footer">
+            <form action="/replies/{{ $reply->id }}" method="post">
+                @method('delete')
+                @csrf
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    @endcan
 </div>

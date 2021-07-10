@@ -23,6 +23,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/threads/{channel}/{thread}/replies', [ThreadRepliesController::class, 'store']);
     Route::get('/threads/create', [ThreadsController::class, 'create']);
     Route::post('/replies/{reply}/favorites', [FavoritesController::class, 'store']);
+    Route::delete('/replies/{reply}', [ThreadRepliesController::class, 'destroy']);
 });
 
 Route::get('/threads/{channel:slug}', [ThreadsController::class, 'index']);
