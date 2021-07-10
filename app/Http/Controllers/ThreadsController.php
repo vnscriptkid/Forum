@@ -52,7 +52,8 @@ class ThreadsController extends Controller
             'channel_id' => request('channel_id')
         ]);
 
-        return redirect($thread->link());
+        return redirect($thread->link())
+            ->with('flash', 'Your thread has been published!');
     }
 
     /**

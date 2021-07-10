@@ -45,7 +45,7 @@ class ThreadRepliesController extends Controller
             'body' => request('body')
         ]);
 
-        return redirect($thread->link());
+        return redirect($thread->link())->with('flash', 'Your reply has been left!');
     }
 
     /**
