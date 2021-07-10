@@ -52,7 +52,6 @@ class DeleteThreadsTest extends TestCase
 
     public function test_all_replies_associated_with_thread_get_deleted()
     {
-        $this->withoutExceptionHandling();
         $me = create(User::class);
         $myThread = create(Thread::class, 1, [
             'user_id' => $me->id
@@ -68,5 +67,25 @@ class DeleteThreadsTest extends TestCase
         $this->assertDatabaseMissing('threads', ['id' => $myThread->id]);
         $this->assertDatabaseMissing('replies', ['id' => $repliesOnMyThread[0]->id]);
         $this->assertDatabaseMissing('replies', ['id' => $repliesOnMyThread[1]->id]);
+    }
+
+    public function test_all_related_activities_get_deleted_when_thread_is_deleted()
+    {
+        $me = create(User::class);
+        $this->signIn($me);
+
+        $myThread = create(Thread::class, 1, [
+            'user_id' => $me->id
+        ]);
+        $repliesOnMyThread = create(Reply::class, 2, [
+            'thread_id' => $myThread->id
+        ]);
+
+        $response = $this->json('delete', $myThread->link());
+        $response->assertStatus(204);
+
+        $this->assertDatabaseCount('threads', 0);
+        $this->assertDatabaseCount('replies', 0);
+        $this->assertDatabaseCount('activities', 0);
     }
 }

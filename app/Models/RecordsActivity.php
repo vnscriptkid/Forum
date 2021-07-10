@@ -15,6 +15,10 @@ trait RecordsActivity
                 static::createActivity($subject);
             });
         }
+
+        static::deleting(function ($subject) {
+            $subject->activities()->delete();
+        });
     }
 
     public static function getEventNames()
