@@ -24,6 +24,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/threads/create', [ThreadsController::class, 'create']);
     Route::post('/replies/{reply}/favorites', [FavoritesController::class, 'store']);
     Route::delete('/replies/{reply}', [ThreadRepliesController::class, 'destroy']);
+    Route::patch('/replies/{reply}', [ThreadRepliesController::class, 'update']);
 });
 
 Route::get('/threads/{channel:slug}', [ThreadsController::class, 'index']);

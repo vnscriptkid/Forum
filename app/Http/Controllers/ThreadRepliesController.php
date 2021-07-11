@@ -6,6 +6,7 @@ use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ThreadRepliesController extends Controller
 {
@@ -78,9 +79,21 @@ class ThreadRepliesController extends Controller
      * @param  \App\Models\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Thread $thread)
+    public function update(Reply $reply)
     {
-        //
+        $this->authorize('update', $reply);
+
+        $validator = Validator::make(request()->all(), [
+            'body' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $reply->update([
+            'body' => request('body')
+        ]);
     }
 
     /**
