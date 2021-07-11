@@ -35,17 +35,17 @@
         },
         methods: {
             toggle() {
-                this.favoritedByMe ? this.like() : this.unlike();
+                this.favoritedByMe ? this.unlike() : this.like();
             },
             like() {
-                axios.delete(this.link);
-                this.favoritesCount++;
-                this.favoritedByMe = false;
-            },
-            unlike() {
                 axios.post(this.link);
-                this.favoritesCount--;
+                this.favoritesCount++;
                 this.favoritedByMe = true;
+                },
+            unlike() {
+                axios.delete(this.link);
+                this.favoritesCount--;
+                this.favoritedByMe = false;
             }
         }
     }

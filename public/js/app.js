@@ -1896,17 +1896,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     toggle: function toggle() {
-      this.favoritedByMe ? this.like() : this.unlike();
+      this.favoritedByMe ? this.unlike() : this.like();
     },
     like: function like() {
-      axios__WEBPACK_IMPORTED_MODULE_0___default().delete(this.link);
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post(this.link);
       this.favoritesCount++;
-      this.favoritedByMe = false;
+      this.favoritedByMe = true;
     },
     unlike: function unlike() {
-      axios__WEBPACK_IMPORTED_MODULE_0___default().post(this.link);
+      axios__WEBPACK_IMPORTED_MODULE_0___default().delete(this.link);
       this.favoritesCount--;
-      this.favoritedByMe = true;
+      this.favoritedByMe = false;
     }
   }
 });
