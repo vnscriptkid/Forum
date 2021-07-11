@@ -9,6 +9,7 @@ class Reply extends Model
 {
     protected $guarded = [];
     protected $with = ['favorites', 'owner'];
+    protected $appends = ['favoritesCount', 'favoritedByMe'];
 
     use HasFactory;
     use Favoritable;
@@ -37,5 +38,10 @@ class Reply extends Model
     public function link()
     {
         return $this->thread->link() . "#reply-{$this->id}";
+    }
+
+    public function getFavoritesCountAttribute()
+    {
+        return $this->favorites->count();
     }
 }

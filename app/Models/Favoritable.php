@@ -9,18 +9,32 @@ trait Favoritable
         return $this->morphMany(Favorite::class, 'favorited');
     }
 
-    public function favorite()
+    public function favorite($user)
     {
-        $withUser = ['user_id' => auth()->id()];
+        $withUser = ['user_id' => $user->id];
 
         if (!$this->favorites()->where($withUser)->exists()) {
             $this->favorites()->create($withUser);
         }
     }
 
+    public function unfavorite($user)
+    {
+        $withUser = ['user_id' => $user->id];
+
+        if ($this->favorites()->where($withUser)->exists()) {
+            $this->favorites()->where($withUser)->delete();
+        }
+    }
+
     public function isFavoritedByMe()
     {
         return !!$this->favorites->where('user_id', auth()->id())->count();
+    }
+
+    public function getFavoritedByMeAttribute()
+    {
+        return $this->isFavoritedByMe();
     }
 
     public function getFavoritesCountAttribute()
