@@ -11,10 +11,15 @@ export default {
             errors: null
         }
     },
+    computed: {
+        endpoint() {
+            return `/replies/${this.attributes.id}`;
+        }
+    },
     methods: {
         async update() {
             try {
-                await axios.patch(`/replies/${this.attributes.id}`, {
+                await axios.patch(this.endpoint, {
                     body: this.body
                 });
                 this.editing = false;
@@ -26,6 +31,12 @@ export default {
         cancel() {
             this.body = this.attributes.body;
             this.editing = false;
+        },
+        destroy() {
+            axios.delete(this.endpoint);
+            $(this.$el).fadeOut(200, () => {
+                flash('Reply deleted!');
+            });
         }
     }
 }

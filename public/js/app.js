@@ -1998,6 +1998,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       errors: null
     };
   },
+  computed: {
+    endpoint: function endpoint() {
+      return "/replies/".concat(this.attributes.id);
+    }
+  },
   methods: {
     update: function update() {
       var _this = this;
@@ -2009,7 +2014,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context.prev = 0;
                 _context.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().patch("/replies/".concat(_this.attributes.id), {
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().patch(_this.endpoint, {
                   body: _this.body
                 });
 
@@ -2035,6 +2040,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     cancel: function cancel() {
       this.body = this.attributes.body;
       this.editing = false;
+    },
+    destroy: function destroy() {
+      axios__WEBPACK_IMPORTED_MODULE_1___default().delete(this.endpoint);
+      $(this.$el).fadeOut(200, function () {
+        flash('Reply deleted!');
+      });
     }
   }
 });

@@ -108,6 +108,10 @@ class ThreadRepliesController extends Controller
 
         $reply->delete();
 
+        if (request()->wantsJson()) {
+            return response(null, 200);
+        }
+
         return back();
     }
 }

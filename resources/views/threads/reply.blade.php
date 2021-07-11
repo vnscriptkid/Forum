@@ -27,11 +27,7 @@
         </div>
         @can('update', $reply)
             <div v-if="!editing" class="card-footer d-flex">
-                <form class="mr-2" action="/replies/{{ $reply->id }}" method="post">
-                    @method('delete')
-                    @csrf
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
+                <button @click="destroy" class="btn btn-danger">Delete</button>
     
                 <button @click="editing = true" class="btn btn-warning">Edit</button>
             </div>
