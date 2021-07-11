@@ -6,7 +6,7 @@
             <small class="text-muted">Since {{ $profileUser->created_at->diffForHumans() }}</small>
         </h1>   
         
-        @foreach ($activitiesByDate as $date => $activities)
+        @forelse ($activitiesByDate as $date => $activities)
             <h2 class="display-5 card-header">{{ $date }}</h2>
             <br>    
             @foreach ($activities as $activity)
@@ -14,6 +14,8 @@
                     @include("profiles.{$activity->type}")
                 @endif
             @endforeach
-        @endforeach
+        @empty
+            <p>There's no activity yet.</p>
+        @endforelse
     </div>
 @endsection
