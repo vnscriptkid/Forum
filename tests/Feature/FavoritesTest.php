@@ -75,4 +75,23 @@ class FavoritesTest extends TestCase
         $this->assertDatabaseMissing('favorites', ['user_id' => auth()->id()]);
         $this->assertDatabaseHas('favorites', ['user_id' => $someone->id]);
     }
+
+    public function test_unliking_a_reply_will_delete_associated_activity()
+    {
+        // Given I am a logged-in user
+        // And I liked a reply
+        // When I unlike that reply
+        // Then the activity `created_activity` get deleted
+        $this->signIn();
+
+        $reply = create(Reply::class);
+
+        $reply->favorite(auth()->user());
+        $this->assertDatabaseHas('activities', ['type' => 'created_favorite', 'user_id' => auth()->id()]);
+
+        $response = $this->delete("/replies/{$reply->id}/favorites");
+
+        $response->assertStatus(200);
+        $this->assertDatabaseMissing('activities', ['type' => 'created_favorite', 'user_id' => auth()->id()]);
+    }
 }
