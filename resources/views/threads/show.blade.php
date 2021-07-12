@@ -6,15 +6,16 @@
             <div class="col-md-8 col-md-offset-2">
                 <div class="card mb-3">
                     <div class="card-header d-flex align-items-center">
-                        <div class="flex-fill">
+                        <h4 class="flex-fill heading-4">
+                            <i class="fas fa-feather-alt"></i>
                             <a href="{{ $thread->owner->link() }}">{{ $thread->owner->name }}</a> posted: 
                             {{ $thread->title }}
-                        </div>
+                        </h4>
                         @can('update', $thread)
                             <form action="{{ $thread->link() }}" method="post">
                                 @csrf
                                 @method('delete')
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
                             </form>
                         @endcan
                     </div>                 
@@ -35,7 +36,7 @@
                         <div class="form-group">
                             <textarea class="form-control" name="body" rows="5" placeholder="Have something to say?"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit</button>
                     </form>
                 @endauth
     

@@ -2,6 +2,7 @@
     <div id="reply-{{ $reply->id }}" class="card flex-fill mb-3">
         <div class="card-header d-flex align-items-center">
             <div class="flex-fill">
+                <i class="fas fa-comment"></i>
                 <a href="#">{{ $reply->owner->name }} </a>
                 said {{ $reply->formattedDate }}
             </div>
@@ -27,9 +28,9 @@
         </div>
         @can('update', $reply)
             <div v-if="!editing" class="card-footer d-flex">
-                <button @click="destroy" class="btn btn-danger">Delete</button>
+            <button @click="destroy" class="btn btn-sm btn-danger mr-2"><i class="fas fa-trash-alt"></i> Delete</button>
     
-                <button @click="editing = true" class="btn btn-warning">Edit</button>
+                <button @click="editing = true" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Edit</button>
             </div>
         @endcan
     </div>
